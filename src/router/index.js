@@ -51,121 +51,138 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard', affix: true }
     }]
-  },
+  }
+]
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
+export const asyncRoutes = [
+  // {
+  //   path: '/customer',
+  //   component: Layout,
+  //   redirect: '/customer/index',
+  //   name: 'customer-manager',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '客户管理',
+  //     icon: 'customer-manager'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: '客户列表',
+  //       component: () => import('@/views/customer/index'),
+  //       meta: { title: '客户列表', icon: 'customer', roles: ['CUSTOMER_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'order',
+  //       name: '销售订单',
+  //       component: () => import('@/views/customer/order'),
+  //       meta: { title: '销售订单', icon: 'order', roles: ['CUSTOMER_ORDER_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'order-detail/:customerOrderId(\\d+)',
+  //       name: '订单详情',
+  //       hidden: true,
+  //       component: () => import('@/views/customer/order-detail'),
+  //       meta: { title: '订单详情', icon: 'order', roles: ['CUSTOMER_ORDER_MANAGEMENT'] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/goods',
+  //   component: Layout,
+  //   redirect: '/goods/index',
+  //   name: 'goods-manager',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '商品管理',
+  //     icon: 'goods-manager'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: '商品列表',
+  //       component: () => import('@/views/goods/index'),
+  //       meta: { title: '商品列表', icon: 'goods', roles: ['GOODS_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'tag',
+  //       name: '商品标签',
+  //       component: () => import('@/views/goods/tag'),
+  //       meta: { title: '商品标签', icon: 'goods-tag', roles: ['GOODS_TAG_MANAGEMENT'] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/store-house',
+  //   component: Layout,
+  //   redirect: '/store-house/index',
+  //   name: 'store-house-manager',
+  //   meta: {
+  //     title: '仓库管理',
+  //     icon: 'store-house'
+  //   },
+  //   alwaysShow: true,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: '仓库管理',
+  //       component: () => import('@/views/store-house/index'),
+  //       meta: { title: '仓库管理', icon: 'store-house', roles: ['STORE_HOUSE_MANAGEMENT'] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   redirect: '/system/user/index',
+  //   name: 'system-manager',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '系统管理',
+  //     icon: 'system'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'user/index',
+  //       name: '用户管理',
+  //       component: () => import('@/views/user/index'),
+  //       meta: { title: '用户管理', icon: 'user', roles: ['USER_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'department/index',
+  //       name: '部门管理',
+  //       component: () => import('@/views/department/index'),
+  //       meta: { title: '部门管理', icon: 'tree', roles: ['DEPARTMENT_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'role/index',
+  //       name: '角色管理',
+  //       component: () => import('@/views/role/index'),
+  //       meta: { title: '角色管理', icon: 'role', roles: ['ROLE_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'dictionary/index',
+  //       name: '字典管理',
+  //       component: () => import('@/views/dictionary/index'),
+  //       meta: { title: '字典管理', icon: 'dict', roles: ['DICTIONARY_MANAGEMENT'] }
+  //     },
+  //     {
+  //       path: 'dictionary/detail/:dictionaryId(\\d+)',
+  //       hidden: true,
+  //       name: '字典数据',
+  //       component: () => import('@/views/dictionary/detail'),
+  //       meta: { title: '字典数据', icon: '', roles: ['DICTIONARY_MANAGEMENT'] }
+  //     }
+  //   ]
+  // },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

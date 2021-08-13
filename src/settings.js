@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '京东云无线宝监控系统',
 
   /**
    * @type {boolean} true | false
@@ -12,5 +12,10 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: false
+  sidebarLogo: false,
+  /**
+   * @type {boolean} true | false
+   * @description 是否开启标签栏缓存
+   */
+  tagsView: true
 }

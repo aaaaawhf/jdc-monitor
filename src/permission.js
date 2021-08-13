@@ -26,21 +26,33 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
-      if (hasGetUserInfo) {
+      // 判断是否获取了用户信息并拿到roles
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      // 如果获取了 放行
+      if (hasRoles) {
         next()
-      } else {
-        try {
-          // get user info
-          await store.dispatch('user/getInfo')
-
+      } else { // 没有就获取用户信息
+        const hasGetUserInfo = store.getters.name
+        if (hasGetUserInfo) {
           next()
-        } catch (error) {
-          // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
+        } else {
+          try {
+            // get user info
+            const { authorities } = await store.dispatch('user/getInfo')
+            //  根据角色生成可访问路由图
+            const accessRoutes = await store.dispatch('permission/generateRoutes', authorities.map((obj, index) => { return obj.authCode }))
+            //  动态添加可访问路由，生成侧边栏
+            router.addRoutes(accessRoutes)
+            // hack method to ensure that addRoutes is complete
+            // set the replace: true, so the navigation will not leave a history record
+            next({ ...to, replace: true })
+          } catch (error) {
+            // remove token and go to login page to re-login
+            await store.dispatch('user/resetToken')
+            Message.error(error || 'Has Error')
+            next(`/login?redirect=${to.path}`)
+            NProgress.done()
+          }
         }
       }
     }
