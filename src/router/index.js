@@ -57,6 +57,50 @@ export const constantRoutes = [
 ]
 
 export const asyncRoutes = [
+  {
+    path: '/device',
+    component: Layout,
+    redirect: '/device/index',
+    name: 'dashboard',
+    alwaysShow: true,
+    meta: {
+      title: '设备管理',
+      icon: 'store-house'
+    },
+    children: [
+      {
+        path: 'index',
+        name: '设备列表',
+        component: () => import('@/views/device/index'),
+        meta: { title: '设备列表', icon: 'store-house' }
+      },
+      {
+        path: 'operate',
+        name: '设备操作',
+        component: () => import('@/views/device/operate'),
+        meta: { title: '设备操作', icon: 'store-house' }
+      }
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: '/system/index',
+    name: 'dashboard',
+    alwaysShow: true,
+    meta: {
+      title: '系统设置',
+      icon: 'store-house'
+    },
+    children: [
+      {
+        path: 'index',
+        name: '账号管理',
+        component: () => import('@/views/system/index'),
+        meta: { title: '账号管理', icon: 'store-house' }
+      }
+    ]
+  },
   // {
   //   path: '/customer',
   //   component: Layout,
