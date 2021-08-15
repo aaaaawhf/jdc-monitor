@@ -1,11 +1,18 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
 
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+                 @click="handleCreate"
+      >
+        添加
+      </el-button>
+    </div>
 
     <el-table
       :data="list"
       style="width: 100%"
-      empty-text="暂无数据，请检查系统设置—>账号管理是否添加账号"
+      empty-text="暂无数据，请点击左上角添加"
     >
       <el-table-column
         fixed="left"
@@ -15,37 +22,48 @@
       />
       <el-table-column
         fixed="left"
-        prop="deviceName"
-        label="设备名称"
+        prop="pin"
+        label="pin"
         width="200"
       />
       <el-table-column
-        prop="deviceId"
-        label="MAC"
+        prop="tgt"
+        label="tgt"
         width="200"
       />
       <el-table-column
         prop="deviceCount"
-        label="今日积分"
+        label="设备数量"
         width="120"
       />
       <el-table-column
-        prop="deviceCount"
-        label="积分总量"
-        width="120"
+        prop="remark"
+        label="备注"
       />
       <el-table-column
         label="创建时间"
         width="200"
       >
         <template slot-scope="{row}">
-          <span>{{ row.deviceAddTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="updateTime"
+        label="更新时间"
+        width="200"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.updateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
+          </el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row,$index)">
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -82,7 +100,7 @@
 </template>
 
 <script>
-import { searchDeviceList} from '@/api/device-list'
+import { searchAccount, createAccount, updateAccount, deleteAccount } from '@/api/account'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
@@ -117,8 +135,8 @@ export default {
       },
       dialogFormVisible: false,
       rules: {
-        pin: [{ required: true, message: 'pin必填', trigger: 'blur' }],
-        tgt: [{ required: true, message: 'tgt必填', trigger: 'blur' }]
+        pin: [{ required: true, message: 'pin is required', trigger: 'blur' }],
+        tgt: [{ required: true, message: 'tgt is required', trigger: 'blur' }]
       }
     }
   },
@@ -128,8 +146,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      searchDeviceList(this.listQuery).then(response => {
-        console.log(response)
+      searchAccount(this.listQuery).then(response => {
         this.list = response.data.records
         this.total = response.data.total
         // parseTime()
@@ -143,6 +160,8 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
+        pin: undefined,
+        tgt: undefined
       }
     },
     handleCreate() {
@@ -153,6 +172,59 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleDelete(row, index) {
+      deleteAccount({ id: row.id }).then(() => {
+        this.list.splice(index, 1)
+        this.$notify({
+          title: 'Success',
+          message: '删除成功！',
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createAccount(this.temp).then(() => {
+            this.list.unshift(this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          updateAccount(tempData).then(() => {
+            const index = this.list.findIndex(v => v.id === this.temp.id)
+            this.list.splice(index, 1, this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    }
   }
 }
 </script>

@@ -61,43 +61,43 @@ export const asyncRoutes = [
     path: '/device',
     component: Layout,
     redirect: '/device/index',
-    name: 'dashboard',
+    name: 'device',
     alwaysShow: true,
     meta: {
       title: '设备管理',
-      icon: 'store-house'
+      icon: 'device-management'
     },
     children: [
       {
         path: 'index',
         name: '设备列表',
         component: () => import('@/views/device/index'),
-        meta: { title: '设备列表', icon: 'store-house' }
+        meta: { title: '设备列表', icon: 'device-list' }
       },
-      {
-        path: 'operate',
-        name: '设备操作',
-        component: () => import('@/views/device/operate'),
-        meta: { title: '设备操作', icon: 'store-house' }
-      }
+      // {
+      //   path: 'operate',
+      //   name: '设备操作',
+      //   component: () => import('@/views/device/operate'),
+      //   meta: { title: '设备操作', icon: 'store-house' }
+      // }
     ]
   },
   {
     path: '/system',
     component: Layout,
-    redirect: '/system/index',
-    name: 'dashboard',
+    redirect: '/system/account',
+    name: 'system',
     alwaysShow: true,
     meta: {
       title: '系统设置',
-      icon: 'store-house'
+      icon: 'system-set'
     },
     children: [
       {
-        path: 'index',
+        path: 'account',
         name: '账号管理',
-        component: () => import('@/views/system/index'),
-        meta: { title: '账号管理', icon: 'store-house' }
+        component: () => import('@/views/system/account'),
+        meta: { title: '账号管理', icon: 'account-management' }
       }
     ]
   },

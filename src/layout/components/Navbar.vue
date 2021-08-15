@@ -7,7 +7,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar == null ? 'https://ysxl-management-system.oss-cn-beijing.aliyuncs.com/logo.jpeg': avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="avatar == null ? 'https://img30.360buyimg.com/smartcloud/s200x200_jfs/t1/125301/11/17250/27203/5fa39909E9272e0e4/7155db62d2d06b44.png': avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">

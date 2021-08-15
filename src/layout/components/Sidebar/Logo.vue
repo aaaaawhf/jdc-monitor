@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: '京东云无线宝监控系统',
-      logo: 'https://ysxl-management-system.oss-cn-beijing.aliyuncs.com/logo.jpeg'
+      logo: 'https://img30.360buyimg.com/smartcloud/s200x200_jfs/t1/125301/11/17250/27203/5fa39909E9272e0e4/7155db62d2d06b44.png'
     }
   }
 }
