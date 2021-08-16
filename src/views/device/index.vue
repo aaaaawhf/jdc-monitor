@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
 
-
     <el-table
       :data="list"
       style="width: 100%"
@@ -25,12 +24,12 @@
         width="200"
       />
       <el-table-column
-        prop="deviceCount"
+        prop="todayPointIncome"
         label="今日积分"
         width="120"
       />
       <el-table-column
-        prop="deviceCount"
+        prop="allPointIncome"
         label="积分总量"
         width="120"
       />
@@ -51,22 +50,31 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size"
-                @pagination="getList"
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.size"
+      @pagination="getList"
     />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
-               style="margin-left:50px;"
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="70px"
+        style="margin-left:50px;"
       >
         <el-form-item label="pin" prop="pin">
-          <el-input v-model="temp.pin" placeholder="请输入pin"/>
+          <el-input v-model="temp.pin" placeholder="请输入pin" />
         </el-form-item>
         <el-form-item label="tgt" prop="tgt">
-          <el-input v-model="temp.tgt" type="textarea" :rows="5" placeholder="请输入tgt"/>
+          <el-input v-model="temp.tgt" type="textarea" :rows="5" placeholder="请输入tgt" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="temp.remark" placeholder="请输入备注"/>
+          <el-input v-model="temp.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -82,7 +90,7 @@
 </template>
 
 <script>
-import { searchDeviceList} from '@/api/device-list'
+import { searchDeviceList } from '@/api/device-list'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
@@ -142,7 +150,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
+        id: undefined
       }
     },
     handleCreate() {
@@ -152,7 +160,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-    },
+    }
   }
 }
 </script>
