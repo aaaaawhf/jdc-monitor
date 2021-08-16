@@ -2,8 +2,12 @@
   <div class="app-container">
     <div class="filter-container">
 
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                 @click="handleCreate"
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
       >
         添加
       </el-button>
@@ -69,22 +73,31 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size"
-                @pagination="getList"
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.size"
+      @pagination="getList"
     />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
-               style="margin-left:50px;"
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="70px"
+        style="margin-left:50px;"
       >
         <el-form-item label="pin" prop="pin">
-          <el-input v-model="temp.pin" placeholder="请输入pin"/>
+          <el-input v-model="temp.pin" placeholder="请输入pin" />
         </el-form-item>
         <el-form-item label="tgt" prop="tgt">
-          <el-input v-model="temp.tgt" type="textarea" :rows="5" placeholder="请输入tgt"/>
+          <el-input v-model="temp.tgt" type="textarea" :rows="5" placeholder="请输入tgt" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="temp.remark" placeholder="请输入备注"/>
+          <el-input v-model="temp.remark" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -194,9 +207,16 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          const loading = this.$loading({
+            lock: true,
+            text: '正在校验信息，请稍等...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           createAccount(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
+            loading.close()
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
@@ -210,11 +230,18 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          const loading = this.$loading({
+            lock: true,
+            text: '正在校验信息，请稍等...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           const tempData = Object.assign({}, this.temp)
           updateAccount(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
+            loading.close()
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
