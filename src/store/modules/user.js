@@ -60,9 +60,9 @@ const actions = {
         const { name, avatar, authorities, username } = data
         // roles must be a non-empty array
         console.log(username)
-        if (username !== 'admin' && (!authorities || authorities.length <= 0)) {
-          reject('该用户没有权限')
-        }
+        // if (username !== 'admin' && (!authorities || authorities.length <= 0)) {
+        //   reject('该用户没有权限')
+        // }
         commit('SET_ROLES', authorities.map((obj, index) => { return obj.authCode }))
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
