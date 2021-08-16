@@ -14,7 +14,8 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+// 引入echarts
+import * as echarts from 'echarts'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -34,6 +35,8 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+Vue.prototype.$echarts = echarts
 
 new Vue({
   el: '#app',

@@ -44,7 +44,7 @@
       <el-table-column label="操作" fixed="right" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
+            5分钟统计
           </el-button>
         </template>
       </el-table-column>
@@ -58,31 +58,11 @@
       @pagination="getList"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="70px"
-        style="margin-left:50px;"
-      >
-        <el-form-item label="pin" prop="pin">
-          <el-input v-model="temp.pin" placeholder="请输入pin" />
-        </el-form-item>
-        <el-form-item label="tgt" prop="tgt">
-          <el-input v-model="temp.tgt" type="textarea" :rows="5" placeholder="请输入tgt" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="temp.remark" placeholder="请输入备注" />
-        </el-form-item>
-      </el-form>
+    <el-dialog title="5分钟网速监控" :visible.sync="dialogFormVisible">
+      <div id="statisticsChart" :style="{height: '300px',marginTop:'30px',width:'100%'}" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
+          关闭
         </el-button>
       </div>
     </el-dialog>
@@ -91,6 +71,7 @@
 
 <script>
 import { searchDeviceList } from '@/api/device-list'
+import { searchStatistics } from '@/api/account-device-list-speed-monitor'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
@@ -127,11 +108,36 @@ export default {
       rules: {
         pin: [{ required: true, message: 'pin必填', trigger: 'blur' }],
         tgt: [{ required: true, message: 'tgt必填', trigger: 'blur' }]
-      }
+      },
+      statisticsChart: null,
+      legendData: [],
+      xAxisData: [],
+      seriesData: [],
+      updateData: [],
+      downloadData: []
     }
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    window.onresize = () => {
+      try {
+        this.statisticsChart.setOption({
+          dataZoom: {
+            show: true,
+            realtime: true,
+            y: 36,
+            height: 20,
+            start: 0,
+            end: document.body.clientWidth / 2 * 0.93 / 20 / this.xAxisData.length * 100
+          }
+        })
+        this.statisticsChart.resize()
+      } catch (e) {
+        console.log(e)
+      }
+    }
   },
   methods: {
     getList() {
@@ -159,6 +165,172 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogFormVisible = true
+
+      this.$nextTick(() => {
+        if (this.statisticsChart == null) {
+          this.statisticsChart = this.$echarts.init(document.getElementById('statisticsChart'))
+        } else {
+          try {
+            this.statisticsChart.setOption({
+              dataZoom: {
+                show: true,
+                realtime: true,
+                y: 36,
+                height: 20,
+                start: 0,
+                end: document.body.clientWidth / 2 * 0.93 / 20 / this.xAxisData.length * 100
+              }
+            })
+            this.statisticsChart.resize()
+          } catch (e) {
+          }
+          this.statisticsChart.clear()
+        }
+        this.drawLine(row)
+      })
+    },
+    drawLine(row) {
+      searchStatistics({ accountDeviceListId: row.id }).then(response => {
+        console.log(response)
+
+        this.legendData = ['上传速率', '下载速率']
+        this.xAxisData = []
+        this.seriesData = []
+        this.updateData = []
+        this.downloadData = []
+        if (response.success) {
+          response.data.forEach(item => {
+            this.xAxisData.push(parseTime(item.createTime, '{h}:{i}'))
+            this.updateData.push(item.upload / 8000)
+            this.downloadData.push(item.download / 8000)
+          })
+          if (this.legendData.length > 0) {
+            // 绘制图表
+            this.statisticsChart.setOption({
+              color: [
+                // '#0090FF',
+                // '#36CE9E',
+                // '#FFC005',
+                // '#FF515A',
+                '#8B5CFF',
+                '#00CA69'
+              ],
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'cross',
+                  label: {
+                    backgroundColor: '#6a7985'
+                  }
+                }
+              },
+              legend: {
+                data: this.legendData
+              },
+              grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+              },
+              toolbox: {
+                feature: {
+                  magicType: {
+                    type: ['line', 'bar', 'stack', 'tiled']
+                  },
+                  saveAsImage: {}
+                }
+              },
+              xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: this.xAxisData
+              }],
+              yAxis: [{
+                type: 'value'
+              }],
+              dataZoom: {
+                show: true,
+                realtime: true,
+                y: 36,
+                height: 20,
+                start: 0,
+                end: document.body.clientWidth / 2 * 0.93 / 20 / this.xAxisData.length * 100
+              },
+              series: [{
+                name: '上传速率',
+                type: 'line',
+                stack: '总量',
+                smooth: true,
+                lineStyle: {
+                  width: 0
+                },
+                showSymbol: false,
+                areaStyle: {
+                  opacity: 0.8,
+                  color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(128, 255, 165)'
+                  }, {
+                    offset: 1,
+                    color: 'rgba(1, 191, 236)'
+                  }])
+                },
+                emphasis: {
+                  focus: 'series'
+                },
+                data: this.updateData
+              },
+              {
+                name: '下载速率',
+                type: 'line',
+                stack: '总量',
+                smooth: true,
+                lineStyle: {
+                  width: 0
+                },
+                showSymbol: false,
+                areaStyle: {
+                  opacity: 0.8,
+                  color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(0, 221, 255)'
+                  }, {
+                    offset: 1,
+                    color: 'rgba(77, 119, 255)'
+                  }])
+                },
+                emphasis: {
+                  focus: 'series'
+                },
+                data: this.downloadData
+              }]
+            })
+          } else {
+            this.statisticsChart.setOption({
+              title: {
+                text: '暂无数据',
+                x: 'center',
+                y: 'center',
+                textStyle: {
+                  color: '#65ABE7',
+                  fontWeight: 'normal',
+                  fontSize: 16
+                }
+              }
+            })
+          }
+        } else {
+          this.$message({
+            message: response.message,
+            type: 'error'
+          })
+        }
       })
     }
   }
