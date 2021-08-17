@@ -98,6 +98,12 @@ export const asyncRoutes = [
         name: '账号管理',
         component: () => import('@/views/system/account'),
         meta: { title: '账号管理', icon: 'account-management' }
+      },
+      {
+        path: 'notice',
+        name: '通知设置',
+        component: () => import('@/views/system/notice'),
+        meta: { title: '通知设置', icon: 'notice-set' }
       }
     ]
   },
