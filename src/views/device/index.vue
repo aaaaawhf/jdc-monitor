@@ -34,6 +34,19 @@
         width="120"
       />
       <el-table-column
+        prop="cost"
+        label="成本(元)"
+        width="120"
+      />
+      <el-table-column
+        label="回本比例"
+        width="120"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.cost>0 ? parseFloat((row.allPointIncome / row.cost)).toFixed(2) + '%':'请填写成本' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="创建时间"
         width="200"
       >
@@ -45,6 +58,9 @@
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             5分钟统计
+          </el-button>
+          <el-button type="primary" size="mini" @click="handleUpdateCost(row)">
+            设置成本
           </el-button>
         </template>
       </el-table-column>
@@ -66,15 +82,37 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog title="设置成本" :visible.sync="dialogCostVisible">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="70px"
+        style="margin-left:50px;"
+      >
+        <el-form-item label="成本" prop="cost">
+          <el-input-number v-model="temp.cost" :precision="2" :step="1" :min="1" placeholder="请输入成本" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogCostVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="updateCostData()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { searchDeviceList } from '@/api/device-list'
+import { searchDeviceList, updateCost } from '@/api/device-list'
 import { searchStatistics } from '@/api/account-device-list-speed-monitor'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { parseTime } from '@/utils'
-import waves from '@/directive/waves' // waves directive
+import waves from '@/directive/waves'
 
 export default {
   name: 'Account',
@@ -105,9 +143,9 @@ export default {
         remark: undefined
       },
       dialogFormVisible: false,
+      dialogCostVisible: false,
       rules: {
-        pin: [{ required: true, message: 'pin必填', trigger: 'blur' }],
-        tgt: [{ required: true, message: 'tgt必填', trigger: 'blur' }]
+        cost: [{ required: true, message: '成本必填', trigger: 'blur' }]
       },
       statisticsChart: null,
       legendData: [],
@@ -194,10 +232,15 @@ export default {
         this.drawLine(row)
       })
     },
+    handleUpdateCost(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogCostVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
     drawLine(row) {
       searchStatistics({ accountDeviceListId: row.id }).then(response => {
-        console.log(response)
-
         this.legendData = ['上传速率', '下载速率']
         this.xAxisData = []
         this.seriesData = []
@@ -329,6 +372,31 @@ export default {
           this.$message({
             message: response.message,
             type: 'error'
+          })
+        }
+      })
+    },
+    updateCostData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const loading = this.$loading({
+            lock: true,
+            text: '正在设置成本，请稍等...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          const tempData = Object.assign({}, this.temp)
+          updateCost(tempData).then(() => {
+            const index = this.list.findIndex(v => v.id === this.temp.id)
+            this.list.splice(index, 1, this.temp)
+            this.dialogCostVisible = false
+            loading.close()
+            this.$notify({
+              title: 'Success',
+              message: '成本设置成功！',
+              type: 'success',
+              duration: 2000
+            })
           })
         }
       })

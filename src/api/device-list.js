@@ -7,3 +7,11 @@ export function searchDeviceList(data) {
     data
   })
 }
+
+export function updateCost(data) {
+  return request({
+    url: '/account-device-list/updateCost',
+    method: 'post',
+    data
+  })
+}
