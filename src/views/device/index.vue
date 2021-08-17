@@ -34,6 +34,28 @@
         width="120"
       />
       <el-table-column
+        label="5分钟上传"
+      >
+        <template slot-scope="{row}">
+          <span>{{ parseFloat((row.nowUpload / 8 / 1024)).toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="5分钟下载"
+      >
+        <template slot-scope="{row}">
+          <span>{{ parseFloat((row.nowDownload / 8 / 1024)).toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="allPointIncome"
+        label="积分总量"
+      />
+      <el-table-column
+        prop="allPointIncome"
+        label="积分总量"
+      />
+      <el-table-column
         prop="cost"
         label="成本(元)"
         width="120"
