@@ -26,14 +26,17 @@
         width="130"
       />
       <el-table-column
-        prop="todayPointIncome"
         label="今日积分"
-        width="60"
-      />
+        width="80"
+      >
+        <template slot-scope="{row}">
+          <el-tag style="width: 40px" :type="row.todayPointIncome > 100 ? (row.todayPointIncome > 200 ? (row.todayPointIncome > 300 ? 'success' : '') : 'warning') : 'danger'">{{ row.todayPointIncome }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="allPointIncome"
         label="积分总量"
-        width="60"
+        width="80"
       />
       <el-table-column
         label="5分钟上传"
@@ -77,7 +80,7 @@
         width="80"
       >
         <template slot-scope="{row}">
-          <span>{{ row.cost>0 ? parseFloat((row.allPointIncome / row.cost)).toFixed(2) + '%':'请填写成本' }}</span>
+          <el-progress :width="60" type="circle" :percentage="parseFloat((row.cost > 0 ? row.allPointIncome / row.cost : 0.0).toFixed(2))" />
         </template>
       </el-table-column>
       <el-table-column
@@ -198,6 +201,8 @@ export default {
       updateData: [],
       downloadData: []
     }
+  },
+  computed: {
   },
   created() {
     this.getList()
