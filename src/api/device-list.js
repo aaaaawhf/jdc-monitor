@@ -15,3 +15,11 @@ export function updateCost(data) {
     data
   })
 }
+
+export function updateReboot(data) {
+  return request({
+    url: '/account-device-list/reboot',
+    method: 'post',
+    data
+  })
+}

@@ -95,13 +95,16 @@
           <span>{{ row.deviceAddTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             5分钟统计
           </el-button>
           <el-button type="primary" size="mini" @click="handleUpdateCost(row)">
             设置成本
+          </el-button>
+          <el-button type="primary" size="mini" @click="handleReboot(row)">
+            重启设备
           </el-button>
         </template>
       </el-table-column>
@@ -149,7 +152,7 @@
 </template>
 
 <script>
-import { searchDeviceList, updateCost } from '@/api/device-list'
+import { searchDeviceList, updateCost, updateReboot } from '@/api/device-list'
 import { searchStatistics } from '@/api/account-device-list-speed-monitor'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { parseTime } from '@/utils'
@@ -440,6 +443,26 @@ export default {
             })
           })
         }
+      })
+    },
+    handleReboot(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.$confirm('此操作将重启设备, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        updateReboot(this.temp).then(response => {
+          this.$message({
+            type: 'success',
+            message: '重启成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消重启'
+        })
       })
     }
   }
