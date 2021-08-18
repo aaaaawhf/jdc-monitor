@@ -53,7 +53,7 @@
       </el-table-column>
       <el-table-column
         label="今日上传估量"
-        width="70"
+        width="120"
       >
         <template slot-scope="{row}">
           <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column
         label="今日下载估量"
-        width="70"
+        width="120"
       >
         <template slot-scope="{row}">
           <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
@@ -70,7 +70,7 @@
       <el-table-column
         prop="cost"
         label="成本(元)"
-        width="60"
+        width="80"
       />
       <el-table-column
         label="回本比例"
@@ -81,14 +81,21 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="onlineTimeStr"
+        label="运行时间"
+        align="center"
+        width="140"
+      />
+      <el-table-column
         label="创建时间"
+        align="center"
         width="140"
       >
         <template slot-scope="{row}">
           <span>{{ row.deviceAddTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             5分钟统计
