@@ -485,13 +485,12 @@ export default {
           sums[index] = '合计'
           return
         }
-        console.log(column)
         const values = data.map(item => Number(item[column.property]))
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
             if (!isNaN(value)) {
-              return prev + ((index === 5 || index === 6) ? parseFloat((curr / 8 / 1024).toFixed(2)) : ((index === 7 || index === 8) ? parseFloat((curr / 8 / 1024 / 1024).toFixed(2)) : curr))
+              return parseFloat((prev + ((index === 5 || index === 6) ? parseFloat((curr / 8 / 1024).toFixed(2)) : ((index === 7 || index === 8) ? parseFloat((curr / 8 / 1024 / 1024).toFixed(2)) : curr))).toFixed(2))
             } else {
               return prev
             }
