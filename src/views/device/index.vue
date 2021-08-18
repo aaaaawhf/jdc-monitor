@@ -16,53 +16,65 @@
         fixed="left"
         prop="deviceName"
         label="设备名称"
-        width="200"
+        align="center"
+        width="120"
       />
       <el-table-column
+        align="center"
         prop="deviceId"
         label="MAC"
-        width="200"
+        width="130"
       />
       <el-table-column
         prop="todayPointIncome"
         label="今日积分"
-        width="120"
+        width="60"
       />
       <el-table-column
         prop="allPointIncome"
         label="积分总量"
-        width="120"
+        width="60"
       />
       <el-table-column
         label="5分钟上传"
+        width="100"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowUpload / 8 / 1024)).toFixed(2) }}</span>
+          <span>{{ parseFloat((row.nowUpload / 8 / 1024)).toFixed(2) + ' M/s' }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="5分钟下载"
+        width="100"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowDownload / 8 / 1024)).toFixed(2) }}</span>
+          <span>{{ parseFloat((row.nowDownload / 8 / 1024)).toFixed(2) + ' M/s' }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="allPointIncome"
-        label="积分总量"
-      />
+        label="今日上传估量"
+        width="70"
+      >
+        <template slot-scope="{row}">
+          <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
-        prop="allPointIncome"
-        label="积分总量"
-      />
+        label="今日下载估量"
+        width="70"
+      >
+        <template slot-scope="{row}">
+          <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="cost"
         label="成本(元)"
-        width="120"
+        width="60"
       />
       <el-table-column
         label="回本比例"
-        width="120"
+        width="80"
       >
         <template slot-scope="{row}">
           <span>{{ row.cost>0 ? parseFloat((row.allPointIncome / row.cost)).toFixed(2) + '%':'请填写成本' }}</span>
@@ -70,13 +82,13 @@
       </el-table-column>
       <el-table-column
         label="创建时间"
-        width="200"
+        width="140"
       >
         <template slot-scope="{row}">
           <span>{{ row.deviceAddTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             5分钟统计
