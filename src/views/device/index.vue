@@ -4,6 +4,8 @@
     <el-table
       :data="list"
       style="width: 100%"
+      show-summary
+      :summary-method="getSummaries"
       empty-text="暂无数据，请检查系统设置—>账号管理是否添加账号"
     >
       <el-table-column
@@ -26,6 +28,7 @@
         width="130"
       />
       <el-table-column
+        prop="todayPointIncome"
         label="今日积分"
         width="80"
       >
@@ -39,35 +42,39 @@
         width="80"
       />
       <el-table-column
-        label="5分钟上传"
+        prop="nowUpload"
+        label="5分钟上传(M/s)"
         width="100"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowUpload / 8 / 1024)).toFixed(2) + ' M/s' }}</span>
+          <span>{{ parseFloat((row.nowUpload / 8 / 1024).toFixed(2)) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="5分钟下载"
+        prop="nowDownload"
+        label="5分钟下载(M/s)"
         width="100"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowDownload / 8 / 1024)).toFixed(2) + ' M/s' }}</span>
+          <span>{{ parseFloat((row.nowDownload / 8 / 1024).toFixed(2)) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="今日上传估量"
+        prop="totalUpload"
+        label="今日上传估量(G)"
         width="120"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
+          <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024).toFixed(2)) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="今日下载估量"
+        prop="totalDownload"
+        label="今日下载估量(G)"
         width="120"
       >
         <template slot-scope="{row}">
-          <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024)).toFixed(2) + ' G' }}</span>
+          <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024).toFixed(2)) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -469,6 +476,33 @@ export default {
           message: '已取消重启'
         })
       })
+    },
+    getSummaries(param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计'
+          return
+        }
+        console.log(column)
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!isNaN(value)) {
+              return prev + ((index === 5 || index === 6) ? parseFloat((curr / 8 / 1024).toFixed(2)) : ((index === 7 || index === 8) ? parseFloat((curr / 8 / 1024 / 1024).toFixed(2)) : curr))
+            } else {
+              return prev
+            }
+          }, 0)
+          sums[index] += ' '
+        } else {
+          sums[index] = ''
+        }
+      })
+
+      return sums
     }
   }
 }
