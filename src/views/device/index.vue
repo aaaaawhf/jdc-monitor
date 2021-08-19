@@ -498,7 +498,7 @@ export default {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
             if (!isNaN(value)) {
-              return parseFloat((prev + ((index === 5 || index === 6) ? parseFloat((curr / 8 / 1024).toFixed(2)) : ((index === 7 || index === 8) ? parseFloat((curr / 8 / 1024 / 1024).toFixed(2)) : curr))).toFixed(2))
+              return parseFloat((prev + ((index === 6 || index === 7) ? parseFloat((curr / 8 / 1024).toFixed(2)) : ((index === 8 || index === 9) ? parseFloat((curr / 8 / 1024 / 1024).toFixed(2)) : curr))).toFixed(2))
             } else {
               return prev
             }
