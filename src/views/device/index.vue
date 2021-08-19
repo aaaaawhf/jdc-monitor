@@ -28,6 +28,14 @@
         width="130"
       />
       <el-table-column
+        align="center"
+        label="图片"
+      >
+        <template slot-scope="{row}">
+          <el-avatar shape="square" fit="fill" :src="row.pimgUrl" />
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="todayPointIncome"
         label="今日积分"
         width="80"
