@@ -30,6 +30,7 @@
       <el-table-column
         align="center"
         label="图片"
+        width="80"
       >
         <template slot-scope="{row}">
           <el-avatar shape="square" fit="fill" :src="row.pimgUrl" />
@@ -50,7 +51,6 @@
         width="80"
       />
       <el-table-column
-        prop="allPointIncome"
         label="插件信息"
         width="200"
       >
