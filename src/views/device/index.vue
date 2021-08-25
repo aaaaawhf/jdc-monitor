@@ -50,6 +50,16 @@
         width="80"
       />
       <el-table-column
+        prop="allPointIncome"
+        label="插件信息"
+        width="200"
+      >
+        <template slot-scope="{row}">
+          <el-tag v-if="row.pluginOneNickname != null" :type="row.pluginOneStatus === '正常' ? 'success' : 'danger'">{{ (row.pluginOneRunPos!=null ? (row.pluginOneRunPos === '分区' ? '内置-' : row.pluginOneRunPos + '-') : '') + row.pluginOneNickname + '-' + row.pluginOneStatus + (row.pluginOneCacheSize > 0 ? '：' + (row.pluginOneCacheSize / 1024 / 1024).toFixed(2) + 'G' : '') }}</el-tag>
+          <el-tag v-if="row.pluginTwoNickname != null" :type="row.pluginTwoStatus === '正常' ? 'success' : 'danger'">{{ (row.pluginTwoRunPos!=null ? (row.pluginTwoRunPos === '分区' ? '内置-' : row.pluginTwoRunPos + '-') : '') + row.pluginTwoNickname + '-' + row.pluginTwoStatus + (row.pluginTwoCacheSize > 0 ? '：' + (row.pluginTwoCacheSize / 1024 / 1024).toFixed(2) + 'G' : '') }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="nowUpload"
         label="5分钟上传(M/s)"
         width="100"
