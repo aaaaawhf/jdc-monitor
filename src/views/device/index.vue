@@ -59,42 +59,42 @@
           <el-tag v-if="row.pluginTwoNickname != null" :type="row.pluginTwoStatus === '正常' ? 'success' : 'danger'">{{ (row.pluginTwoRunPos!=null ? (row.pluginTwoRunPos === '分区' ? '内置-' : row.pluginTwoRunPos + '-') : '') + row.pluginTwoNickname + '-' + row.pluginTwoStatus + (row.pluginTwoCacheSize > 0 ? '：' + (row.pluginTwoCacheSize / 1024 / 1024).toFixed(2) + 'G' : '') }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="nowUpload"
-        label="5分钟上传(M/s)"
-        width="100"
-      >
-        <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowUpload / 8 / 1024).toFixed(2)) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="nowDownload"
-        label="5分钟下载(M/s)"
-        width="100"
-      >
-        <template slot-scope="{row}">
-          <span>{{ parseFloat((row.nowDownload / 8 / 1024).toFixed(2)) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="totalUpload"
-        label="今日上传估量(G)"
-        width="120"
-      >
-        <template slot-scope="{row}">
-          <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024).toFixed(2)) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="totalDownload"
-        label="今日下载估量(G)"
-        width="120"
-      >
-        <template slot-scope="{row}">
-          <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024).toFixed(2)) }}</span>
-        </template>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="nowUpload"-->
+<!--        label="5分钟上传(M/s)"-->
+<!--        width="100"-->
+<!--      >-->
+<!--        <template slot-scope="{row}">-->
+<!--          <span>{{ parseFloat((row.nowUpload / 8 / 1024).toFixed(2)) }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--        prop="nowDownload"-->
+<!--        label="5分钟下载(M/s)"-->
+<!--        width="100"-->
+<!--      >-->
+<!--        <template slot-scope="{row}">-->
+<!--          <span>{{ parseFloat((row.nowDownload / 8 / 1024).toFixed(2)) }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--        prop="totalUpload"-->
+<!--        label="今日上传估量(G)"-->
+<!--        width="120"-->
+<!--      >-->
+<!--        <template slot-scope="{row}">-->
+<!--          <span>{{ parseFloat((row.totalUpload / 8 / 1024 / 1024).toFixed(2)) }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--        prop="totalDownload"-->
+<!--        label="今日下载估量(G)"-->
+<!--        width="120"-->
+<!--      >-->
+<!--        <template slot-scope="{row}">-->
+<!--          <span>{{ parseFloat((row.totalDownload / 8 / 1024 / 1024).toFixed(2)) }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column
         prop="cost"
         label="成本(元)"
@@ -125,9 +125,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            5分钟统计
-          </el-button>
+<!--          <el-button type="primary" size="mini" @click="handleUpdate(row)">-->
+<!--            5分钟统计-->
+<!--          </el-button>-->
           <el-button type="primary" size="mini" @click="handleUpdateCost(row)">
             设置成本
           </el-button>

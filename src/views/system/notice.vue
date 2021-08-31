@@ -1,13 +1,17 @@
 <template>
   <div class="app-container">
-
+    <el-input
+      placeholder="推荐使用Bark方式接收推送，目前Server酱方式每天仅可推送5条消息"
+      disabled
+      style="margin-left:50px;width: 35%"
+    />
     <el-form
       ref="dataForm"
       :rules="rules"
       :model="temp"
       label-position="left"
       label-width="80px"
-      style="margin-left:50px;"
+      style="margin-left:50px;margin-top: 50px"
     >
       <el-form-item label="通知类型" prop="noticeType">
         <el-select v-model="temp.noticeType" placeholder="请选择通知类型" style="width: 30%">
@@ -53,6 +57,7 @@ export default {
       value: '',
       input: '',
       temp: {
+        id: null,
         noticeType: undefined,
         key: undefined,
         isEnabled: undefined
@@ -70,6 +75,7 @@ export default {
     init() {
       searchNotice({}).then(response => {
         if (response.data.noticeType !== null) {
+          this.temp.id = response.data.id
           this.temp.noticeType = response.data.noticeType + ''
           this.temp.key = JSON.parse(response.data.configJson).key
           this.temp.isEnabled = response.data.isEnabled
